@@ -55,13 +55,13 @@ Pensado para crecer hacia modulos como:
 - negocios nuevos
 - reportes
 
-### `frontend-asesores/`
+### `frontend-intermediarios/`
 
-Frontend en **Vue 3 + Vite** para el portal de asesores.
+Frontend en **Vue 3 + Vite** para el portal de intermediarios.
 
 Pensado para crecer hacia modulos como:
 
-- login del asesor
+- login del intermediario
 - seguimiento de solicitudes
 - gestion comercial
 - consulta de clientes
@@ -108,7 +108,7 @@ Actualmente el repositorio ya cuenta con:
 - autenticacion con JWT
 - modulo funcional de clientes
 - modulo funcional de intermediarios
-- base visual inicial para login y registro en admin y asesores
+- base visual inicial para login y registro en admin e intermediarios
 - soporte de CORS para ambos frontends
 
 ## Endpoints Base De Autenticacion
@@ -150,10 +150,10 @@ Disponible en:
 http://127.0.0.1:5173
 ```
 
-### 3. Frontend Asesores
+### 3. Frontend Intermediarios
 
 ```powershell
-cd frontend-asesores
+cd frontend-intermediarios
 npm install
 npm run dev
 ```
@@ -193,7 +193,7 @@ cd backend
 El objetivo de esta migracion es reemplazar el backend legado en Node.js por una plataforma mas mantenible en FastAPI, conservando la logica del negocio y separando la experiencia de usuario por perfil operativo:
 
 - un frontend para administradores
-- un frontend para asesores
+- un frontend para intermediarios
 - un backend comun y centralizado
 
 ## Siguientes Pasos Recomendados

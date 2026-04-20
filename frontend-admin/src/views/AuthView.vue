@@ -6,6 +6,7 @@ import { setSession } from "../services/session";
 
 const route = useRoute();
 const router = useRouter();
+const brandLogo = "https://exxtra.com.co/wp-content/uploads/2019/12/logo-1.png";
 
 const isLogin = computed(() => route.params.mode !== "register");
 const title = computed(() =>
@@ -39,9 +40,9 @@ const roleCards = [
   },
   {
     id: "reportes",
-    eyebrow: "Vista futura",
-    title: "Supervision",
-    description: "Base lista para crecer hacia dashboards, reportes y paneles administrativos.",
+    eyebrow: "Supervision",
+    title: "Vista ejecutiva",
+    description: "Base lista para crecer hacia dashboards, reportes y monitoreo operacional.",
   },
 ];
 
@@ -92,7 +93,11 @@ async function submitRegister() {
 <template>
   <main class="auth-shell">
     <section class="auth-hero">
-      <div class="brand-chip">Exxtra credit operating hub</div>
+      <div class="brand-stack">
+        <img :src="brandLogo" alt="Exxtra" class="brand-logo" />
+        <div class="brand-chip">Panel administrativo Exxtra</div>
+      </div>
+
       <h1>{{ title }}</h1>
       <p>{{ subtitle }}</p>
 
@@ -134,8 +139,8 @@ async function submitRegister() {
 
       <form v-if="isLogin" class="auth-form" @submit.prevent="submitLogin">
         <label>
-          <span>Usuario</span>
-          <input v-model.trim="loginForm.usuario" type="text" placeholder="Ej. 123456789" required />
+          <span>Usuario o correo</span>
+          <input v-model.trim="loginForm.usuario" type="text" placeholder="Ej. JOR002 o admin@test.com" required />
         </label>
 
         <label>

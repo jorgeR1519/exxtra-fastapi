@@ -5,11 +5,12 @@ import { clearSession, getSession } from "../services/session";
 
 const router = useRouter();
 const session = getSession();
+const brandLogo = "https://exxtra.com.co/wp-content/uploads/2019/12/logo-1.png";
 
 const roleLabel = computed(() => {
   if (!session?.user?.tipo) return "Sin rol";
   if (session.user.tipo.toLowerCase() === "administrador") return "Administrador";
-  if (session.user.tipo.toLowerCase() === "intermediario") return "Asesor";
+  if (session.user.tipo.toLowerCase() === "intermediario") return "Intermediario";
   return session.user.tipo;
 });
 
@@ -22,6 +23,7 @@ function logout() {
 <template>
   <main class="dashboard-shell">
     <section class="dashboard-card">
+      <img :src="brandLogo" alt="Exxtra" class="brand-logo dashboard-logo" />
       <span class="eyebrow">Sesion activa</span>
       <h1>Hola, {{ session?.user?.idUsuario }}</h1>
       <p>

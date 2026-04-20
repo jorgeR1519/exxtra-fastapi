@@ -41,9 +41,12 @@ class AuthService:
 
     def login(self, payload: LoginRequest) -> TokenResponse:
         user = self.user_repository.get_by_usuario(payload.usuario)
+        if not user and "@" in payload.usuario:
+            user = self.user_repository.get_by_email(payload.usuario)
+
         if not user or not verify_password(payload.contrasena, user["contrasena"]):
             raise AppException(
-                detail="Usuario/Contraseña Incorrectos.",
+                detail="Usuario/Contrasena Incorrectos.",
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
 
