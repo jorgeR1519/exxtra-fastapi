@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+backend/venv/
+
+frontend-admin/node_modules/
+frontend-admin/dist/
+frontend-asesores/node_modules/
+frontend-asesores/dist/
