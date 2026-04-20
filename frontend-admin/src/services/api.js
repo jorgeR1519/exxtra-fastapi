@@ -26,4 +26,26 @@ export async function register(payload) {
   return response.data;
 }
 
+export async function fetchUsers(search = "") {
+  const response = await api.get("/usuarios", {
+    params: search ? { search } : {},
+  });
+  return response.data;
+}
+
+export async function createUser(payload) {
+  const response = await api.post("/usuario", payload);
+  return response.data;
+}
+
+export async function updateUser(userId, payload) {
+  const response = await api.put(`/usuario/${userId}`, payload);
+  return response.data;
+}
+
+export async function deleteUser(userId) {
+  const response = await api.delete(`/usuario/${userId}`);
+  return response.data;
+}
+
 export default api;

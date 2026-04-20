@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { getSession } from "../services/session";
+import { clearSession, getSession, isAdminSession } from "../services/session";
 import AuthView from "../views/AuthView.vue";
 import DashboardView from "../views/DashboardView.vue";
 
@@ -31,6 +31,11 @@ router.beforeEach((to) => {
   const session = getSession();
 
   if (to.meta.requiresAuth && !session) {
+    return { name: "auth", params: { mode: "login" } };
+  }
+
+   if (session && !isAdminSession(session)) {
+    clearSession();
     return { name: "auth", params: { mode: "login" } };
   }
 

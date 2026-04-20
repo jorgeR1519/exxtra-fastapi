@@ -32,3 +32,12 @@ def get_current_user(
         )
 
     return user
+
+
+def get_current_admin(current_user: dict = Depends(get_current_user)) -> dict:
+    if current_user.get("tipo", "").lower() != "administrador":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to access this resource.",
+        )
+    return current_user

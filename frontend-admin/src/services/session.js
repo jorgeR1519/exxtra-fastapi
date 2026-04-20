@@ -1,5 +1,9 @@
 const SESSION_KEY = "exxtra-admin-session";
 
+export function isAdminSession(session) {
+  return session?.user?.tipo?.toLowerCase() === "administrador";
+}
+
 export function getSession() {
   const rawValue = window.localStorage.getItem(SESSION_KEY);
   return rawValue ? JSON.parse(rawValue) : null;
