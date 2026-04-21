@@ -48,4 +48,53 @@ export async function deleteUser(userId) {
   return response.data;
 }
 
+export async function fetchIntermediaries(search = "") {
+  const response = await api.get("/intermediarios", {
+    params: search ? { search } : {},
+  });
+  return response.data;
+}
+
+export async function fetchIntermediaryRelations(intermediaryId) {
+  const response = await api.get(`/intermediario/${intermediaryId}/relaciones`);
+  return response.data;
+}
+
+export async function createIntermediary(payload) {
+  const response = await api.post("/nuevo-intermediario", payload);
+  return response.data;
+}
+
+export async function updateIntermediary(intermediaryId, payload) {
+  const response = await api.put(`/actualiza-intermediario/${intermediaryId}`, payload);
+  return response.data;
+}
+
+export async function deleteIntermediary(intermediaryId) {
+  const response = await api.delete(`/intermediario/${intermediaryId}`);
+  return response.data;
+}
+
+export async function fetchClients(search = "") {
+  const response = await api.get("/clientes", {
+    params: search ? { search } : {},
+  });
+  return response.data;
+}
+
+export async function createClient(payload) {
+  const response = await api.post("/nuevo-cliente", payload);
+  return response.data;
+}
+
+export async function updateClient(clientId, payload) {
+  const response = await api.put(`/actualiza-cliente/${clientId}`, payload);
+  return response.data;
+}
+
+export async function deleteClient(clientId) {
+  const response = await api.delete(`/cliente/${clientId}`);
+  return response.data;
+}
+
 export default api;

@@ -18,6 +18,8 @@
   --soft-blue: #e9f1f7;
   --text-soft: rgba(18, 50, 80, 0.72);
   --shadow: 0 24px 48px rgba(11, 84, 138, 0.12);
+  --glow-blue: rgba(11, 147, 191, 0.22);
+  --glow-blue-soft: rgba(21, 84, 154, 0.12);
 }
 
 * {
@@ -28,6 +30,34 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(18px);
+}
+
+body::before {
+  top: 7vh;
+  right: 8vw;
+  width: min(24vw, 240px);
+  height: min(24vw, 240px);
+  background: radial-gradient(circle, var(--glow-blue) 0%, rgba(11, 147, 191, 0.08) 42%, transparent 72%);
+}
+
+body::after {
+  left: -70px;
+  bottom: 10vh;
+  width: min(18vw, 180px);
+  height: min(18vw, 180px);
+  background: radial-gradient(circle, var(--glow-blue-soft) 0%, rgba(21, 84, 154, 0.05) 44%, transparent 76%);
 }
 
 a {
@@ -43,6 +73,8 @@ select {
 
 #app {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .auth-shell,
@@ -65,6 +97,37 @@ select {
   background: var(--surface);
   backdrop-filter: blur(22px);
   box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.auth-hero::before,
+.auth-panel::before,
+.dashboard-card::before,
+.admin-hero::before,
+.admin-panel::before,
+.user-form-drawer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle 132px at 84% 14%, rgba(11, 147, 191, 0.2) 0, rgba(11, 147, 191, 0.12) 28%, rgba(11, 147, 191, 0.05) 46%, transparent 68%),
+    radial-gradient(circle 74px at 18% 28%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 34%, transparent 70%),
+    radial-gradient(circle 102px at 80% 74%, rgba(11, 147, 191, 0.1) 0, rgba(11, 147, 191, 0.05) 34%, transparent 70%);
+  filter: blur(9px);
+}
+
+.auth-hero > *,
+.auth-panel > *,
+.dashboard-card > *,
+.admin-hero > *,
+.admin-panel > *,
+.user-form-drawer > * {
+  position: relative;
+  z-index: 1;
 }
 
 .auth-hero {
@@ -316,6 +379,40 @@ select {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.admin-sidebar::before,
+.admin-sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.admin-sidebar::before {
+  background:
+    radial-gradient(circle 132px at 84% 14%, rgba(11, 147, 191, 0.24) 0, rgba(11, 147, 191, 0.16) 26%, rgba(11, 147, 191, 0.08) 44%, transparent 68%),
+    radial-gradient(circle 78px at 16% 28%, rgba(21, 84, 154, 0.15) 0, rgba(21, 84, 154, 0.08) 34%, rgba(21, 84, 154, 0.03) 52%, transparent 72%),
+    radial-gradient(circle 104px at 82% 52%, rgba(11, 147, 191, 0.16) 0, rgba(11, 147, 191, 0.09) 34%, rgba(11, 147, 191, 0.03) 52%, transparent 70%),
+    radial-gradient(circle 66px at 22% 70%, rgba(11, 147, 191, 0.14) 0, rgba(11, 147, 191, 0.07) 36%, rgba(11, 147, 191, 0.02) 54%, transparent 74%),
+    radial-gradient(circle 146px at 88% 88%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 32%, rgba(21, 84, 154, 0.02) 50%, transparent 72%);
+  filter: blur(9px);
+  opacity: 1;
+}
+
+.admin-sidebar::after {
+  background:
+    radial-gradient(circle 26px at 76% 12%, rgba(255, 255, 255, 0.36) 0, rgba(255, 255, 255, 0.08) 42%, transparent 82%),
+    radial-gradient(circle 18px at 28% 68%, rgba(255, 255, 255, 0.22) 0, rgba(255, 255, 255, 0.05) 42%, transparent 80%);
+  opacity: 0.42;
+}
+
+.admin-sidebar > * {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar-brand {
@@ -595,6 +692,58 @@ select {
   box-shadow: 0 30px 60px rgba(11, 84, 138, 0.2);
 }
 
+.relations-panel {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(11, 147, 191, 0.12);
+  display: grid;
+  gap: 16px;
+}
+
+.relations-header strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #123250;
+}
+
+.relations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.relation-card,
+.relation-user-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(11, 147, 191, 0.04);
+  border: 1px solid rgba(11, 147, 191, 0.08);
+}
+
+.relation-card span,
+.relation-user-card span {
+  display: block;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.relation-card strong,
+.relation-user-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.08rem;
+}
+
+.relation-users {
+  display: grid;
+  gap: 12px;
+}
+
+.relation-empty {
+  margin: 0;
+}
+
 .drawer-fade-enter-active,
 .drawer-fade-leave-active {
   transition: opacity 180ms ease;
@@ -733,6 +882,11 @@ select {
 }
 
 @media (max-width: 960px) {
+  .auth-shell,
+  .dashboard-shell {
+    padding: 18px;
+  }
+
   .auth-shell {
     grid-template-columns: 1fr;
   }
@@ -749,6 +903,7 @@ select {
   .admin-app-shell,
   .admin-hero,
   .admin-toolbar,
+  .admin-section-header,
   .user-card-main,
   .user-actions,
   .placeholder-grid {
@@ -766,10 +921,48 @@ select {
     min-height: auto;
   }
 
+  .auth-hero,
+  .auth-panel,
+  .admin-sidebar,
+  .admin-hero,
+  .admin-panel,
+  .user-form-drawer {
+    border-radius: 28px;
+  }
+
+  .auth-hero,
+  .auth-panel,
+  .admin-sidebar,
+  .admin-hero,
+  .admin-panel {
+    padding: 24px;
+  }
+
   .users-header,
   .users-header-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .sidebar-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar::before {
+    background:
+      radial-gradient(circle 98px at 88% 10%, rgba(11, 147, 191, 0.22) 0, rgba(11, 147, 191, 0.12) 32%, rgba(11, 147, 191, 0.05) 48%, transparent 70%),
+      radial-gradient(circle 62px at 18% 34%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 34%, transparent 70%),
+      radial-gradient(circle 80px at 80% 66%, rgba(11, 147, 191, 0.12) 0, rgba(11, 147, 191, 0.06) 34%, transparent 68%),
+      radial-gradient(circle 48px at 18% 88%, rgba(11, 147, 191, 0.1) 0, rgba(11, 147, 191, 0.04) 40%, transparent 72%);
+  }
+
+  .sidebar-link,
+  .primary-btn.secondary,
+  .users-create-btn,
+  .ghost-btn,
+  .primary-btn {
+    width: 100%;
+    max-width: none;
   }
 
   .drawer-backdrop {
@@ -780,5 +973,109 @@ select {
   .user-form-drawer {
     width: 100%;
     max-height: 88vh;
+  }
+
+  .relations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-shell,
+  .dashboard-shell {
+    padding: 12px;
+  }
+
+  body::before {
+    top: 10px;
+    right: -24px;
+    width: 150px;
+    height: 150px;
+  }
+
+  body::after {
+    left: -38px;
+    bottom: 8vh;
+    width: 110px;
+    height: 110px;
+  }
+
+  .auth-hero,
+  .auth-panel,
+  .admin-sidebar,
+  .admin-hero,
+  .admin-panel,
+  .user-form-drawer {
+    border-radius: 22px;
+  }
+
+  .auth-hero,
+  .auth-panel,
+  .admin-sidebar,
+  .admin-hero,
+  .admin-panel,
+  .user-form-drawer {
+    padding: 18px;
+  }
+
+  .brand-logo,
+  .sidebar-logo {
+    width: 132px;
+  }
+
+  .auth-hero::before,
+  .auth-panel::before,
+  .dashboard-card::before,
+  .admin-hero::before,
+  .admin-panel::before,
+  .user-form-drawer::before {
+    background:
+      radial-gradient(circle 96px at 86% 12%, rgba(11, 147, 191, 0.2) 0, rgba(11, 147, 191, 0.1) 30%, rgba(11, 147, 191, 0.04) 46%, transparent 70%),
+      radial-gradient(circle 58px at 18% 34%, rgba(21, 84, 154, 0.1) 0, rgba(21, 84, 154, 0.05) 32%, transparent 70%),
+      radial-gradient(circle 72px at 78% 78%, rgba(11, 147, 191, 0.08) 0, rgba(11, 147, 191, 0.04) 34%, transparent 70%);
+    filter: blur(8px);
+  }
+
+  .admin-sidebar::before,
+  .admin-sidebar::after {
+    filter: blur(8px);
+  }
+
+  .panel-header h2,
+  .users-header h2,
+  .module-placeholder-copy h2 {
+    font-size: 1.7rem;
+  }
+
+  .admin-hero h1,
+  .auth-hero h1 {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+  }
+
+  .sidebar-link {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding: 12px;
+  }
+
+  .sidebar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
+
+  .user-card,
+  .hero-card,
+  .placeholder-card {
+    padding: 16px;
+  }
+
+  .drawer-backdrop {
+    padding: 0;
+    align-items: end;
+  }
+
+  .user-form-drawer {
+    max-height: 100vh;
+    border-radius: 22px 22px 0 0;
   }
 }
