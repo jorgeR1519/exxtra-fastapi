@@ -35,7 +35,7 @@ const isSubmitting = ref(false);
 const apiError = ref("");
 const helperMessage = computed(() => {
   if (route.query.denied === "role") {
-    return "Este portal esta reservado para usuarios con rol intermediario.";
+    return "Este portal esta reservado para asesores y usuarios comerciales autorizados.";
   }
   return "Usa tu documento o usuario comercial para continuar.";
 });
@@ -55,8 +55,8 @@ async function submitLogin() {
     const session = await login({ ...loginForm });
     const role = session?.user?.tipo?.toLowerCase();
 
-    if (role !== "intermediario") {
-      apiError.value = "Tu cuenta no corresponde al portal de intermediarios.";
+    if (role !== "asesor" && role !== "intermediario") {
+      apiError.value = "Tu cuenta no corresponde al portal de asesores.";
       return;
     }
 
@@ -79,10 +79,10 @@ async function submitLogin() {
           <div class="brand-chip advisor-chip">Portal comercial Exxtra</div>
         </div>
 
-        <h1>Login para intermediarios y fuerza comercial.</h1>
+        <h1>Login para asesores y fuerza comercial.</h1>
         <p>
-          Entra a tu espacio para hacer seguimiento de solicitudes, acompanar clientes y mantener tu
-          pipeline activo sin depender del panel administrativo.
+          Entra a tu espacio para cotizar, registrar solicitudes y dar seguimiento comercial sin depender
+          del panel administrativo.
         </p>
       </div>
 
@@ -95,7 +95,7 @@ async function submitLogin() {
 
       <div class="advisor-note">
         <span>Acceso esperado</span>
-        <p>Solo usuarios con rol <strong>intermediario</strong> pueden entrar en este portal.</p>
+        <p>Este portal esta orientado a usuarios con rol <strong>asesor</strong>.</p>
       </div>
     </section>
 
@@ -112,11 +112,11 @@ async function submitLogin() {
 
       <form class="auth-form" @submit.prevent="submitLogin">
         <label>
-          <span>Usuario o correo del intermediario</span>
+          <span>Usuario o correo del asesor</span>
           <input
             v-model.trim="loginForm.usuario"
             type="text"
-            placeholder="Ej. INT001 o intermediario@correo.com"
+            placeholder="Ej. ASE001 o asesor@correo.com"
             required
           />
         </label>

@@ -26,4 +26,9 @@ export async function register(payload) {
   return response.data;
 }
 
+export async function getAdvisorDashboard() {
+  const response = await api.get("/asesores/dashboard");
+  return response.data;
+}
+
 export default api;

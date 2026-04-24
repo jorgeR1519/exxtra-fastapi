@@ -38,26 +38,37 @@ body::before,
 body::after {
   content: "";
   position: fixed;
-  border-radius: 999px;
+  border-radius: 58% 42% 63% 37% / 43% 38% 62% 57%;
   pointer-events: none;
   z-index: 0;
-  filter: blur(18px);
 }
 
 body::before {
-  top: 7vh;
-  right: 8vw;
-  width: min(24vw, 240px);
-  height: min(24vw, 240px);
-  background: radial-gradient(circle, var(--glow-blue) 0%, rgba(11, 147, 191, 0.08) 42%, transparent 72%);
+  top: 8vh;
+  right: 7vw;
+  width: min(22vw, 220px);
+  height: min(28vw, 280px);
+  background:
+    linear-gradient(180deg, rgba(11, 147, 191, 0.24), rgba(11, 147, 191, 0.1));
+  border: 1px solid rgba(11, 147, 191, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 10px 24px rgba(11, 147, 191, 0.08);
+  opacity: 0.95;
 }
 
 body::after {
-  left: -70px;
-  bottom: 10vh;
-  width: min(18vw, 180px);
-  height: min(18vw, 180px);
-  background: radial-gradient(circle, var(--glow-blue-soft) 0%, rgba(21, 84, 154, 0.05) 44%, transparent 76%);
+  left: -40px;
+  bottom: 8vh;
+  width: min(16vw, 160px);
+  height: min(20vw, 200px);
+  background:
+    linear-gradient(180deg, rgba(21, 84, 154, 0.18), rgba(11, 147, 191, 0.08));
+  border: 1px solid rgba(21, 84, 154, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 8px 18px rgba(21, 84, 154, 0.06);
+  opacity: 0.84;
 }
 
 a {
@@ -114,10 +125,10 @@ select {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(circle 132px at 84% 14%, rgba(11, 147, 191, 0.2) 0, rgba(11, 147, 191, 0.12) 28%, rgba(11, 147, 191, 0.05) 46%, transparent 68%),
-    radial-gradient(circle 74px at 18% 28%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 34%, transparent 70%),
-    radial-gradient(circle 102px at 80% 74%, rgba(11, 147, 191, 0.1) 0, rgba(11, 147, 191, 0.05) 34%, transparent 70%);
-  filter: blur(9px);
+    radial-gradient(ellipse 54px 72px at 86% 14%, rgba(11, 147, 191, 0.16) 0, rgba(11, 147, 191, 0.1) 58%, transparent 59%),
+    radial-gradient(ellipse 36px 48px at 18% 28%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.08) 58%, transparent 59%),
+    radial-gradient(ellipse 46px 62px at 80% 74%, rgba(11, 147, 191, 0.12) 0, rgba(11, 147, 191, 0.08) 58%, transparent 59%);
+  opacity: 0.9;
 }
 
 .auth-hero > *,
@@ -394,12 +405,11 @@ select {
 
 .admin-sidebar::before {
   background:
-    radial-gradient(circle 132px at 84% 14%, rgba(11, 147, 191, 0.24) 0, rgba(11, 147, 191, 0.16) 26%, rgba(11, 147, 191, 0.08) 44%, transparent 68%),
-    radial-gradient(circle 78px at 16% 28%, rgba(21, 84, 154, 0.15) 0, rgba(21, 84, 154, 0.08) 34%, rgba(21, 84, 154, 0.03) 52%, transparent 72%),
-    radial-gradient(circle 104px at 82% 52%, rgba(11, 147, 191, 0.16) 0, rgba(11, 147, 191, 0.09) 34%, rgba(11, 147, 191, 0.03) 52%, transparent 70%),
-    radial-gradient(circle 66px at 22% 70%, rgba(11, 147, 191, 0.14) 0, rgba(11, 147, 191, 0.07) 36%, rgba(11, 147, 191, 0.02) 54%, transparent 74%),
-    radial-gradient(circle 146px at 88% 88%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 32%, rgba(21, 84, 154, 0.02) 50%, transparent 72%);
-  filter: blur(9px);
+    radial-gradient(ellipse 58px 76px at 84% 14%, rgba(11, 147, 191, 0.22) 0, rgba(11, 147, 191, 0.14) 58%, transparent 59%),
+    radial-gradient(ellipse 38px 50px at 16% 28%, rgba(21, 84, 154, 0.14) 0, rgba(21, 84, 154, 0.09) 58%, transparent 59%),
+    radial-gradient(ellipse 46px 64px at 82% 52%, rgba(11, 147, 191, 0.14) 0, rgba(11, 147, 191, 0.08) 58%, transparent 59%),
+    radial-gradient(ellipse 32px 42px at 22% 70%, rgba(11, 147, 191, 0.12) 0, rgba(11, 147, 191, 0.07) 58%, transparent 59%),
+    radial-gradient(ellipse 62px 82px at 88% 88%, rgba(21, 84, 154, 0.11) 0, rgba(21, 84, 154, 0.07) 58%, transparent 59%);
   opacity: 1;
 }
 
@@ -950,10 +960,10 @@ select {
 
   .admin-sidebar::before {
     background:
-      radial-gradient(circle 98px at 88% 10%, rgba(11, 147, 191, 0.22) 0, rgba(11, 147, 191, 0.12) 32%, rgba(11, 147, 191, 0.05) 48%, transparent 70%),
-      radial-gradient(circle 62px at 18% 34%, rgba(21, 84, 154, 0.12) 0, rgba(21, 84, 154, 0.06) 34%, transparent 70%),
-      radial-gradient(circle 80px at 80% 66%, rgba(11, 147, 191, 0.12) 0, rgba(11, 147, 191, 0.06) 34%, transparent 68%),
-      radial-gradient(circle 48px at 18% 88%, rgba(11, 147, 191, 0.1) 0, rgba(11, 147, 191, 0.04) 40%, transparent 72%);
+      radial-gradient(ellipse 42px 58px at 88% 10%, rgba(11, 147, 191, 0.2) 0, rgba(11, 147, 191, 0.12) 58%, transparent 59%),
+      radial-gradient(ellipse 28px 38px at 18% 34%, rgba(21, 84, 154, 0.1) 0, rgba(21, 84, 154, 0.06) 58%, transparent 59%),
+      radial-gradient(ellipse 34px 48px at 80% 66%, rgba(11, 147, 191, 0.12) 0, rgba(11, 147, 191, 0.06) 58%, transparent 59%),
+      radial-gradient(ellipse 24px 32px at 18% 88%, rgba(11, 147, 191, 0.1) 0, rgba(11, 147, 191, 0.05) 58%, transparent 59%);
   }
 
   .sidebar-link,
@@ -1030,15 +1040,9 @@ select {
   .admin-panel::before,
   .user-form-drawer::before {
     background:
-      radial-gradient(circle 96px at 86% 12%, rgba(11, 147, 191, 0.2) 0, rgba(11, 147, 191, 0.1) 30%, rgba(11, 147, 191, 0.04) 46%, transparent 70%),
-      radial-gradient(circle 58px at 18% 34%, rgba(21, 84, 154, 0.1) 0, rgba(21, 84, 154, 0.05) 32%, transparent 70%),
-      radial-gradient(circle 72px at 78% 78%, rgba(11, 147, 191, 0.08) 0, rgba(11, 147, 191, 0.04) 34%, transparent 70%);
-    filter: blur(8px);
-  }
-
-  .admin-sidebar::before,
-  .admin-sidebar::after {
-    filter: blur(8px);
+      radial-gradient(ellipse 40px 54px at 86% 12%, rgba(11, 147, 191, 0.18) 0, rgba(11, 147, 191, 0.1) 58%, transparent 59%),
+      radial-gradient(ellipse 24px 34px at 18% 34%, rgba(21, 84, 154, 0.1) 0, rgba(21, 84, 154, 0.06) 58%, transparent 59%),
+      radial-gradient(ellipse 30px 42px at 78% 78%, rgba(11, 147, 191, 0.08) 0, rgba(11, 147, 191, 0.05) 58%, transparent 59%);
   }
 
   .panel-header h2,

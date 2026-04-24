@@ -1,7 +1,8 @@
-const SESSION_KEY = "exxtra-intermediarios-session";
+const SESSION_KEY = "exxtra-asesores-session";
 
 export function isAdvisorSession(session) {
-  return session?.user?.tipo?.toLowerCase() === "intermediario";
+  const role = session?.user?.tipo?.toLowerCase();
+  return role === "asesor" || role === "intermediario";
 }
 
 export function getSession() {
