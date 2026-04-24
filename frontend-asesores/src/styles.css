@@ -461,6 +461,10 @@ select {
 .advisor-nav-item,
 .advisor-subnav-item {
   width: 100%;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
   text-align: left;
   padding: 14px 16px;
   border-radius: 18px;
@@ -488,9 +492,50 @@ select {
   gap: 10px;
 }
 
+.advisor-nav-icon,
+.advisor-subnav-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--accent-dark);
+  border-radius: 9px;
+  background: rgba(11, 147, 191, 0.08);
+  border: 1px solid rgba(11, 147, 191, 0.1);
+  transition: 180ms ease;
+}
+
+.advisor-nav-icon svg,
+.advisor-subnav-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.advisor-nav-item:hover .advisor-nav-icon,
+.advisor-subnav-item:hover .advisor-subnav-icon {
+  transform: translateY(-1px);
+}
+
+.advisor-nav-item.active .advisor-nav-icon,
+.advisor-subnav-item.active .advisor-subnav-icon {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(11, 147, 191, 0.18);
+}
+
+.advisor-nav-label {
+  min-width: 0;
+}
+
 .advisor-nav-parent::after {
   content: "v";
-  float: right;
+  position: absolute;
+  right: 16px;
   opacity: 0.7;
 }
 
@@ -507,6 +552,13 @@ select {
 .advisor-subnav-item {
   color: var(--text-soft);
   font-size: 0.95rem;
+  padding-left: 12px;
+}
+
+.advisor-subnav-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
 }
 
 .advisor-logout {

@@ -12,19 +12,47 @@ const sidebarOpen = ref(false);
 const requestsOpen = ref(true);
 
 const navSections = [
-  { id: "inicio", label: "Inicio" },
-  { id: "cotizador", label: "Cotizador" },
+  {
+    id: "inicio",
+    label: "Inicio",
+    icon: "M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z",
+  },
+  {
+    id: "cotizador",
+    label: "Cotizador",
+    icon: "M8 3.5h8a2.5 2.5 0 0 1 2.5 2.5v12A2.5 2.5 0 0 1 16 20.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2 4h4m-4 4h4m-4 4h2",
+  },
 ];
 
 const requestSections = [
-  { id: "solicitudes-pendientes", label: "Pendientes" },
-  { id: "solicitudes-legalizar", label: "Para legalizar" },
-  { id: "solicitudes-legalizadas", label: "Legalizadas" },
+  {
+    id: "solicitudes-pendientes",
+    label: "Pendientes",
+    icon: "M8 3.5h7l4.5 4.5V18A2.5 2.5 0 0 1 17 20.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2 5h4m-4 4h4m-4 4h3",
+  },
+  {
+    id: "solicitudes-legalizar",
+    label: "Para legalizar",
+    icon: "M8 3.5h8A2.5 2.5 0 0 1 18.5 6v12a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2.2 9.2 1.8 1.8 4-4",
+  },
+  {
+    id: "solicitudes-legalizadas",
+    label: "Legalizadas",
+    icon: "M8 3.5h8A2.5 2.5 0 0 1 18.5 6v12a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2.1 9 2 2 4.8-5.2",
+  },
 ];
 
 const finalSections = [
-  { id: "creditos", label: "Creditos" },
-  { id: "desembolsos", label: "Desembolsos" },
+  {
+    id: "creditos",
+    label: "Creditos",
+    icon: "M4.5 8A2.5 2.5 0 0 1 7 5.5h10A2.5 2.5 0 0 1 19.5 8v8A2.5 2.5 0 0 1 17 18.5H7A2.5 2.5 0 0 1 4.5 16zm3.5 3h8m-8-2h1",
+  },
+  {
+    id: "desembolsos",
+    label: "Desembolsos",
+    icon: "M12 3.5v17M8.5 7.5c0-1.7 1.6-3 3.5-3s3.5 1.3 3.5 3-1.6 3-3.5 3-3.5 1.3-3.5 3 1.6 3 3.5 3 3.5 1.3 3.5 3",
+  },
 ];
 
 const dashboardLoading = ref(false);
@@ -214,7 +242,12 @@ onMounted(() => {
           :class="{ active: activeSection === section.id }"
           @click="selectSection(section.id)"
         >
-          {{ section.label }}
+          <span class="advisor-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path :d="section.icon" />
+            </svg>
+          </span>
+          <span class="advisor-nav-label">{{ section.label }}</span>
         </button>
 
         <div class="advisor-nav-group" :class="{ open: requestsOpen }">
@@ -224,7 +257,12 @@ onMounted(() => {
             :class="{ active: activeSection.startsWith('solicitudes') }"
             @click="toggleRequests"
           >
-            Solicitudes
+            <span class="advisor-nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 7h6m-6 4h6" />
+              </svg>
+            </span>
+            <span class="advisor-nav-label">Solicitudes</span>
           </button>
 
           <div v-if="requestsOpen" class="advisor-subnav">
@@ -236,7 +274,12 @@ onMounted(() => {
               :class="{ active: activeSection === section.id }"
               @click="selectSection(section.id)"
             >
-              {{ section.label }}
+              <span class="advisor-subnav-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path :d="section.icon" />
+                </svg>
+              </span>
+              <span class="advisor-nav-label">{{ section.label }}</span>
             </button>
           </div>
         </div>
@@ -249,7 +292,12 @@ onMounted(() => {
           :class="{ active: activeSection === section.id }"
           @click="selectSection(section.id)"
         >
-          {{ section.label }}
+          <span class="advisor-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path :d="section.icon" />
+            </svg>
+          </span>
+          <span class="advisor-nav-label">{{ section.label }}</span>
         </button>
       </nav>
 
