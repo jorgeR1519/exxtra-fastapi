@@ -31,4 +31,9 @@ export async function getAdvisorDashboard() {
   return response.data;
 }
 
+export async function getCitiesCatalog() {
+  const response = await api.get("/catalog/ciudades");
+  return response.data;
+}
+
 export default api;

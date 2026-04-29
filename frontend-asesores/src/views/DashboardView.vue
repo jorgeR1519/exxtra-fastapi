@@ -1,7 +1,7 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getAdvisorDashboard } from "../services/api";
+import { getAdvisorDashboard, getCitiesCatalog } from "../services/api";
 import { clearSession, getSession } from "../services/session";
 
 const router = useRouter();
@@ -10,6 +10,7 @@ const brandLogo = "https://exxtra.com.co/wp-content/uploads/2019/12/logo-1.png";
 const activeSection = ref("inicio");
 const sidebarOpen = ref(false);
 const requestsOpen = ref(true);
+const fiscalDropdownOpen = ref(false);
 
 const navSections = [
   {
@@ -55,8 +56,32 @@ const finalSections = [
   },
 ];
 
+const summaryFlags = [
+  {
+    id: "documentos",
+    label: "Documentos Adjuntos",
+    icon: "M8 3.5h7l4.5 4.5V18A2.5 2.5 0 0 1 17 20.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2 7h4m-4 4h4",
+  },
+  {
+    id: "firmada",
+    label: "Solicitud Firmada",
+    icon: "M8 12.5 10.3 14.8 15.5 9.6M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
+  },
+  {
+    id: "pagada",
+    label: "C.I Pagada",
+    icon: "M12 3.5v17M8.5 7.5c0-1.7 1.6-3 3.5-3s3.5 1.3 3.5 3-1.6 3-3.5 3-3.5 1.3-3.5 3 1.6 3 3.5 3 3.5 1.3 3.5 3",
+  },
+  {
+    id: "legalizada",
+    label: "Solicitud Legalizada",
+    icon: "M8 3.5h8A2.5 2.5 0 0 1 18.5 6v12a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2.1 9 2 2 4.8-5.2",
+  },
+];
+
 const dashboardLoading = ref(false);
 const dashboardError = ref("");
+const cityOptions = ref([]);
 const dashboardData = ref({
   summary: {
     pending_requests: 0,
@@ -65,6 +90,47 @@ const dashboardData = ref({
     active_credits: 0,
   },
   risk_credits: [],
+});
+
+const quoteForm = reactive({
+  tipoPersona: "Persona Natural",
+  primerNombre: "",
+  segundoNombre: "",
+  primerApellido: "",
+  segundoApellido: "",
+  tipoDocumento: "Cedula de Ciudadania",
+  numeroIdentificacion: "",
+  correo: "",
+  ciudad: "",
+  direccion: "",
+  celular: "",
+  celularAlternativo: "",
+  actividadEconomica: "",
+  regimenVentas: "",
+  responsabilidadesFiscales: [],
+  origenRecursos: "",
+  reutilizaCorreoFacturacion: false,
+  correoFacturacion: "",
+  correoAlternoFirma: false,
+  correoAlternoPagare: "",
+  nombreAsesor: session?.user?.idUsuario || "",
+  cedulaAsesor: "",
+  ramo: "AUTOMOVILES",
+  fechaInicioVigencia: "",
+  vigenciaHasta: "",
+  tiempoCorrido: "",
+  placa: "",
+  valorConIva: "",
+  aseguradora: "",
+  numeroPoliza: "",
+  numeroCertificado: "",
+  beneficiarioOneroso: false,
+  nombreBeneficiarioOneroso: "",
+  numeroCuotas: "",
+  cuotasMaximas: "",
+  pagoSuperiorPrimeraCuota: false,
+  valorMinimoPrimeraCuota: "",
+  otroValorPrimeraCuota: "",
 });
 
 const roleLabel = computed(() => {
@@ -97,7 +163,7 @@ const sectionMeta = computed(() => {
       eyebrow: "Herramienta",
       title: "Cotizador",
       description:
-        "Prepara escenarios iniciales de credito y revisa condiciones comerciales antes de crear la solicitud.",
+        "Prepara la información del cliente, simula la póliza y deja lista la solicitud para continuar el flujo.",
     };
   }
 
@@ -180,7 +246,48 @@ const homeStats = computed(() => [
   },
 ]);
 
+const summaryItems = computed(() => [
+  { id: "credito", label: "Credito", value: quoteForm.numeroPoliza || "-" },
+  { id: "documento", label: "Cedula / NIT", value: quoteForm.numeroIdentificacion || "-" },
+  { id: "correo", label: "Correo Electrónico", value: quoteForm.correo || "-" },
+  { id: "celular", label: "Celular", value: quoteForm.celular || "-" },
+]);
+
 const riskCredits = computed(() => dashboardData.value.risk_credits);
+
+const economicActivityOptions = [
+  "Empleado",
+  "Pensionado",
+  "Profesional Indep",
+  "Comerciante",
+  "Otro",
+];
+
+const salesRegimeOptions = [
+  "No responsable de IVA",
+  "Si responsable de IVA",
+  "Impuesto al consumo",
+  "Si responsable de IVA e Impuesto al consumo",
+];
+
+const fiscalResponsibilityOptions = [
+  "Gran contribuyente",
+  "Autorretenedor",
+  "Agente de retencion en el impuesto sobre las ventas",
+  "Regimen Simple de Tributacion - SIMPLE",
+  "Otro tipo de responsable",
+];
+
+function normalizeAlertStatus(status) {
+  const normalized = String(status || "").trim().toUpperCase();
+  if (normalized.includes("MORA")) return "MORA AV";
+  if (normalized.includes("RIESGO")) return "RIESGO";
+  return "RIESGO";
+}
+
+function alertBadgeClass(status) {
+  return normalizeAlertStatus(status) === "MORA AV" ? "mora-av" : "riesgo";
+}
 
 function selectSection(sectionId) {
   activeSection.value = sectionId;
@@ -191,9 +298,20 @@ function toggleRequests() {
   requestsOpen.value = !requestsOpen.value;
 }
 
+function toggleFiscalDropdown() {
+  fiscalDropdownOpen.value = !fiscalDropdownOpen.value;
+}
+
 function logout() {
   clearSession();
   router.push({ name: "auth", params: { mode: "login" } });
+}
+
+function moneyPlaceholder(value) {
+  if (!value) return "$0";
+  return new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(
+    Number(value) || 0
+  );
 }
 
 async function loadAdvisorDashboard() {
@@ -209,8 +327,17 @@ async function loadAdvisorDashboard() {
   }
 }
 
+async function loadCitiesCatalog() {
+  try {
+    cityOptions.value = await getCitiesCatalog();
+  } catch {
+    cityOptions.value = [];
+  }
+}
+
 onMounted(() => {
   loadAdvisorDashboard();
+  loadCitiesCatalog();
 });
 </script>
 
@@ -259,7 +386,7 @@ onMounted(() => {
           >
             <span class="advisor-nav-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
-                <path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 7h6m-6 4h6" />
+                <path d="M8 3.5h7l4.5 4.5V18A2.5 2.5 0 0 1 17 20.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2 7h4m-4 4h4" />
               </svg>
             </span>
             <span class="advisor-nav-label">Solicitudes</span>
@@ -335,7 +462,13 @@ onMounted(() => {
               <span class="eyebrow">Monitoreo</span>
               <h2>Creditos en seguimiento</h2>
             </div>
-            <p>Clientes con mayor alerta para seguimiento comercial inmediato.</p>
+            <div class="advisor-table-meta">
+              <p>Clientes con mayor alerta para seguimiento comercial inmediato.</p>
+              <div class="advisor-status-legends">
+                <span class="legend-chip riesgo">Riesgo</span>
+                <span class="legend-chip mora-av">Mora AV</span>
+              </div>
+            </div>
           </div>
 
           <div class="advisor-table-wrap">
@@ -358,8 +491,8 @@ onMounted(() => {
                   <td>{{ item.poliza }}</td>
                   <td>{{ item.placa }}</td>
                   <td>
-                    <span class="risk-badge">
-                      {{ item.estado }}
+                    <span class="risk-badge" :class="alertBadgeClass(item.estado)">
+                      {{ normalizeAlertStatus(item.estado) }}
                       <strong>{{ item.mora }}</strong>
                     </span>
                   </td>
@@ -377,6 +510,312 @@ onMounted(() => {
           </div>
         </section>
 
+        <section v-else-if="activeSection === 'cotizador'" class="quote-flow">
+          <article class="quote-section">
+            <div class="quote-section-header">
+              <div class="quote-section-title">
+                <span class="quote-title-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M16 19a4 4 0 0 0-8 0m8 0H8m8 0h3m-11 0H5m7-8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                  </svg>
+                </span>
+                <h2>Resumen</h2>
+              </div>
+            </div>
+
+            <div class="quote-summary-grid">
+              <div v-for="item in summaryItems" :key="item.id" class="quote-summary-card">
+                <span>{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+              </div>
+            </div>
+
+            <div class="quote-flag-grid">
+              <div v-for="item in summaryFlags" :key="item.id" class="quote-flag-card">
+                <span class="quote-flag-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path :d="item.icon" />
+                  </svg>
+                </span>
+                <small>{{ item.label }}</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="quote-section">
+            <div class="quote-section-header">
+              <div class="quote-section-title">
+                <span class="quote-title-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M16 19a4 4 0 0 0-8 0m8 0H8m8 0h3m-11 0H5m7-8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                  </svg>
+                </span>
+                <h2>Información Basica</h2>
+              </div>
+              <div class="quote-section-aside">
+                <p>Para agilizar la cotización, monta la carátula de la póliza sin clausulado aquí.</p>
+                <button type="button" class="quote-outline-btn">OCR</button>
+              </div>
+            </div>
+
+            <div class="quote-form-grid quote-basic-grid">
+              <label class="field">
+                <span>Tipo de Persona*</span>
+                <select v-model="quoteForm.tipoPersona">
+                  <option>Persona Natural</option>
+                  <option>Persona Juridica</option>
+                </select>
+              </label>
+              <div class="quote-grid-spacer"></div>
+              <div class="quote-grid-spacer"></div>
+              <div class="quote-grid-spacer"></div>
+
+              <label class="field"><span>Primer Nombre*</span><input v-model="quoteForm.primerNombre" type="text" /></label>
+              <label class="field"><span>Segundo Nombre</span><input v-model="quoteForm.segundoNombre" type="text" /></label>
+              <label class="field"><span>Primer Apellido*</span><input v-model="quoteForm.primerApellido" type="text" /></label>
+              <label class="field"><span>Segundo Apellido*</span><input v-model="quoteForm.segundoApellido" type="text" /></label>
+
+              <label class="field">
+                <span>Tipo de Documento*</span>
+                <select v-model="quoteForm.tipoDocumento">
+                  <option>Cedula de Ciudadania</option>
+                  <option>NIT</option>
+                  <option>Cedula de Extranjeria</option>
+                  <option>Pasaporte</option>
+                </select>
+              </label>
+              <label class="field"><span>Número de Identificación*</span><input v-model="quoteForm.numeroIdentificacion" type="text" /></label>
+              <label class="field field-span-2"><span>Correo Electrónico*</span><input v-model="quoteForm.correo" type="email" /></label>
+
+              <label class="field">
+                <span>Ciudad*</span>
+                <select v-model="quoteForm.ciudad">
+                  <option value="">Ciudad*</option>
+                  <option v-for="city in cityOptions" :key="city.value" :value="city.label">{{ city.label }}</option>
+                </select>
+              </label>
+              <label class="field field-span-2"><span>Dirección*</span><input v-model="quoteForm.direccion" type="text" /></label>
+              <label class="field"><span>Celular*</span><input v-model="quoteForm.celular" type="text" /></label>
+              <label class="field"><span>Celular Alternativo</span><input v-model="quoteForm.celularAlternativo" type="text" /></label>
+
+              <label class="field">
+                <span>Actividad Economica*</span>
+                <select v-model="quoteForm.actividadEconomica">
+                  <option value="">Actividad Economica*</option>
+                  <option v-for="option in economicActivityOptions" :key="option" :value="option">{{ option }}</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Regimen de Ventas*</span>
+                <select v-model="quoteForm.regimenVentas">
+                  <option value="">Regimen de Ventas*</option>
+                  <option v-for="option in salesRegimeOptions" :key="option" :value="option">{{ option }}</option>
+                </select>
+              </label>
+              <div class="field quote-checklist-field field-span-2">
+                <span>Responsabilidades Fiscales*</span>
+                <div class="quote-multiselect" :class="{ open: fiscalDropdownOpen }">
+                  <button type="button" class="quote-multiselect-trigger" @click="toggleFiscalDropdown">
+                    <span>
+                      {{
+                        quoteForm.responsabilidadesFiscales.length
+                          ? `${quoteForm.responsabilidadesFiscales.length} seleccionada(s)`
+                          : "Responsabilidades Fiscales*"
+                      }}
+                    </span>
+                    <strong>{{ fiscalDropdownOpen ? "▴" : "▾" }}</strong>
+                  </button>
+                  <div v-if="fiscalDropdownOpen" class="quote-checklist">
+                    <label v-for="option in fiscalResponsibilityOptions" :key="option" class="quote-checkbox-option">
+                      <input v-model="quoteForm.responsabilidadesFiscales" :value="option" type="checkbox" />
+                      <span>{{ option }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <label class="field field-span-full"><span>Origen de los Recursos*</span><input v-model="quoteForm.origenRecursos" type="text" /></label>
+            </div>
+
+            <div class="quote-radio-grid">
+              <div class="quote-radio-card">
+                <strong>¿Desea reutilizar el correo para facturación electrónica?</strong>
+                <div class="radio-group">
+                  <label><input v-model="quoteForm.reutilizaCorreoFacturacion" :value="false" type="radio" />No</label>
+                  <label><input v-model="quoteForm.reutilizaCorreoFacturacion" :value="true" type="radio" />SI</label>
+                </div>
+              </div>
+              <label class="field">
+                <span>Correo de Facturación Electrónica*</span>
+                <input v-model="quoteForm.correoFacturacion" type="email" />
+              </label>
+            </div>
+
+            <div class="quote-radio-grid">
+              <div class="quote-radio-card">
+                <strong>¿Desea un Correo alterno para firmar pagaré?</strong>
+                <div class="radio-group">
+                  <label><input v-model="quoteForm.correoAlternoFirma" :value="false" type="radio" />No</label>
+                  <label><input v-model="quoteForm.correoAlternoFirma" :value="true" type="radio" />SI</label>
+                </div>
+              </div>
+              <label class="field">
+                <span>Correo Alterno Para Firmar Pagaré</span>
+                <input v-model="quoteForm.correoAlternoPagare" type="email" />
+              </label>
+            </div>
+          </article>
+
+          <article class="quote-section">
+            <div class="quote-section-header">
+              <div class="quote-section-title">
+                <span class="quote-title-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M8 3.5h8a2.5 2.5 0 0 1 2.5 2.5v12A2.5 2.5 0 0 1 16 20.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5zm2 4h4m-4 4h4m-4 4h4" />
+                  </svg>
+                </span>
+                <h2>Simulación de tu Poliza</h2>
+              </div>
+              <div class="quote-date-note">
+                <span>*Fecha Creación*</span>
+                <strong>--/--/----</strong>
+              </div>
+            </div>
+
+            <div class="quote-form-grid">
+              <label class="field field-span-2"><span>Nombre del Asesor*</span><input v-model="quoteForm.nombreAsesor" type="text" /></label>
+              <label class="field field-span-2"><span>Cedula del Asesor*</span><input v-model="quoteForm.cedulaAsesor" type="text" /></label>
+
+              <label class="field field-span-full">
+                <span>Ramo*</span>
+                <select v-model="quoteForm.ramo">
+                  <option>AUTOMOVILES</option>
+                  <option>VIDA</option>
+                  <option>HOGAR</option>
+                </select>
+              </label>
+
+              <label class="field"><span>Fecha de Inicio de Vigencia*</span><input v-model="quoteForm.fechaInicioVigencia" type="date" /></label>
+              <label class="field"><span>Vigencia Hasta</span><input v-model="quoteForm.vigenciaHasta" type="date" /></label>
+              <label class="field"><span>Tiempo Corrido (días)</span><input v-model="quoteForm.tiempoCorrido" type="number" /></label>
+              <div class="quote-grid-spacer"></div>
+
+              <label class="field"><span>Placa*</span><input v-model="quoteForm.placa" type="text" /></label>
+              <label class="field"><span>Valor (con IVA)*</span><input v-model="quoteForm.valorConIva" type="number" /></label>
+              <label class="field">
+                <span>Aseguradora</span>
+                <select v-model="quoteForm.aseguradora">
+                  <option value="">Aseguradora</option>
+                  <option>Sura</option>
+                  <option>Allianz</option>
+                  <option>Bolivar</option>
+                </select>
+              </label>
+              <label class="field"><span># de Póliza*</span><input v-model="quoteForm.numeroPoliza" type="text" /></label>
+              <label class="field"><span># de Certificado</span><input v-model="quoteForm.numeroCertificado" type="text" /></label>
+
+              <div class="quote-radio-stack">
+                <strong>¿Beneficiario Oneroso?</strong>
+                <div class="radio-group">
+                  <label><input v-model="quoteForm.beneficiarioOneroso" :value="false" type="radio" />NO</label>
+                  <label><input v-model="quoteForm.beneficiarioOneroso" :value="true" type="radio" />SI</label>
+                </div>
+              </div>
+              <label class="field field-span-2">
+                <span>Beneficiario Oneroso</span>
+                <select v-model="quoteForm.nombreBeneficiarioOneroso">
+                  <option value="">Beneficiario Oneroso</option>
+                  <option>Bancolombia</option>
+                  <option>Davivienda</option>
+                </select>
+              </label>
+              <label class="field"><span># de Cuotas*</span><input v-model="quoteForm.numeroCuotas" type="number" /></label>
+              <label class="field"><span>Cuotas Máximas</span><input v-model="quoteForm.cuotasMaximas" type="number" /></label>
+
+              <label class="field"><span>Valor Mínimo Primera Cuota</span><input v-model="quoteForm.valorMinimoPrimeraCuota" type="number" /></label>
+              <div class="quote-radio-stack field-span-2">
+                <strong>¿Desea realizar un pago superior de primera cuota?</strong>
+                <div class="radio-group">
+                  <label><input v-model="quoteForm.pagoSuperiorPrimeraCuota" :value="false" type="radio" />NO</label>
+                  <label><input v-model="quoteForm.pagoSuperiorPrimeraCuota" :value="true" type="radio" />SI</label>
+                </div>
+              </div>
+              <label class="field">
+                <span>Otro Valor Primera Cuota</span>
+                <input v-model="quoteForm.otroValorPrimeraCuota" type="number" />
+                <small class="field-help">{{ moneyPlaceholder(quoteForm.otroValorPrimeraCuota) }}</small>
+              </label>
+            </div>
+
+            <div class="quote-policy-notes">
+              <p><strong>Tasa % Efectiva Anual:</strong> 26.675 %</p>
+              <p>Nota: Cuotas vencen el día ___ de cada mes.</p>
+            </div>
+
+            <div class="quote-duedates">
+              <div class="quote-duedate-item">
+                <span class="quote-mini-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M7 3.5v3m10-3v3M4.5 9.5h15M6.5 5.5h11A2 2 0 0 1 19.5 7.5v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2Z" />
+                  </svg>
+                </span>
+                <div>
+                  <span>Cotización Válida hasta</span>
+                  <strong>--/--/----</strong>
+                </div>
+              </div>
+              <div class="quote-duedate-item">
+                <span class="quote-mini-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 6v6l4 2m4-2a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+                  </svg>
+                </span>
+                <div>
+                  <span>Fecha Máxima Pago Primera Cuota</span>
+                  <strong>--/--/----</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="quote-section">
+            <div class="quote-section-title">
+              <span class="quote-title-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3.5v3m10-3v3M4.5 9.5h15M6.5 5.5h11A2 2 0 0 1 19.5 7.5v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2Z" />
+                </svg>
+              </span>
+              <h2>Plan de Pagos</h2>
+            </div>
+            <p class="quote-empty-copy">No se ha generado un plan de pagos.</p>
+          </article>
+
+          <article class="quote-section">
+            <div class="quote-section-title">
+              <span class="quote-title-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3.5v3m10-3v3M4.5 9.5h15M6.5 5.5h11A2 2 0 0 1 19.5 7.5v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2Z" />
+                </svg>
+              </span>
+              <h2>Documentos</h2>
+            </div>
+            <p class="quote-empty-copy">No se ha creado la solicitud. No puedes adjuntar documentos.</p>
+          </article>
+
+          <article class="quote-section">
+            <div class="quote-section-title">
+              <span class="quote-title-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3.5v3m10-3v3M4.5 9.5h15M6.5 5.5h11A2 2 0 0 1 19.5 7.5v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2Z" />
+                </svg>
+              </span>
+              <h2>Enviar Solicitud</h2>
+            </div>
+            <p class="quote-empty-copy">A continuación, se debe crear la solicitud.</p>
+            <button type="button" class="primary-btn quote-submit-btn">Crear Solicitud</button>
+          </article>
+        </section>
+
         <div v-else class="dashboard-grid advisor-summary-grid">
           <article v-for="item in overviewCards" :key="item.id">
             <span>{{ item.label }}</span>
@@ -384,7 +823,7 @@ onMounted(() => {
           </article>
         </div>
 
-        <section v-if="activeSection !== 'inicio'" class="advisor-workspace">
+        <section v-if="activeSection !== 'inicio' && activeSection !== 'cotizador'" class="advisor-workspace">
           <div class="advisor-workspace-card">
             <span>Estado del modulo</span>
             <h2>{{ sectionMeta.title }}</h2>

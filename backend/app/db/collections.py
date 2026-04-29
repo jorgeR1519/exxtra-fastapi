@@ -1,6 +1,7 @@
 class Collections:
     USUARIOS = "usuarios"
     CLIENTES = "clientes"
+    CIUDADES = "ciudades"
     INTERMEDIARIOS = "intermediarios"
     SOLICITUD_DE_CREDITO = "solicitud_de_credito"
     NEGOCIOS_NUEVOS = "negocios_nuevos"

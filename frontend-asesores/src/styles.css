@@ -656,6 +656,41 @@ select {
   color: var(--text-soft);
 }
 
+.advisor-table-meta {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.advisor-status-legends {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.legend-chip.riesgo {
+  background: rgba(222, 16, 16, 0.1);
+  border-color: rgba(222, 16, 16, 0.18);
+  color: #b80f0f;
+}
+
+.legend-chip.mora-av {
+  background: rgba(242, 186, 24, 0.14);
+  border-color: rgba(220, 164, 0, 0.18);
+  color: #8a6500;
+}
+
 .advisor-table-wrap {
   overflow-x: auto;
 }
@@ -711,6 +746,11 @@ select {
   font-weight: 700;
 }
 
+.risk-badge.mora-av {
+  background: #f0b315;
+  color: #4f3a00;
+}
+
 .risk-badge strong {
   display: inline-grid;
   place-items: center;
@@ -723,6 +763,10 @@ select {
   font-size: 0.84rem;
 }
 
+.risk-badge.mora-av strong {
+  color: #8a6500;
+}
+
 .advisor-workspace-card {
   padding: 24px;
   border-radius: 24px;
@@ -732,6 +776,348 @@ select {
 .advisor-workspace-card h2 {
   margin: 0 0 8px;
   font-size: 1.5rem;
+}
+
+.quote-flow {
+  display: grid;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.quote-section {
+  padding: 28px;
+  border-radius: 28px;
+  border: 1px solid rgba(11, 147, 191, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.quote-section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 22px;
+}
+
+.quote-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quote-section-title h2 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: #28469a;
+}
+
+.quote-title-icon,
+.quote-mini-icon {
+  display: inline-grid;
+  place-items: center;
+  color: #28469a;
+}
+
+.quote-title-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.quote-section-aside {
+  display: grid;
+  gap: 12px;
+  justify-items: end;
+}
+
+.quote-section-aside p,
+.quote-date-note span,
+.quote-empty-copy,
+.quote-policy-notes p,
+.quote-duedate-item span {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.quote-outline-btn {
+  min-width: 110px;
+  border-radius: 14px;
+  border: 1px solid #3d56d1;
+  background: #ffffff;
+  color: #3d56d1;
+  padding: 11px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.quote-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.quote-summary-card {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(11, 147, 191, 0.08);
+  background: rgba(246, 249, 253, 0.9);
+}
+
+.quote-summary-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+}
+
+.quote-summary-card strong {
+  font-size: 1rem;
+}
+
+.quote-flag-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.quote-flag-card {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.quote-flag-card small {
+  color: var(--text-soft);
+  line-height: 1.25;
+}
+
+.quote-flag-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(11, 147, 191, 0.08);
+  color: #a5aab8;
+}
+
+.quote-flag-icon svg,
+.quote-mini-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.quote-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.quote-basic-grid {
+  align-items: start;
+}
+
+.quote-grid-spacer {
+  min-height: 1px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.quote-checklist-field {
+  align-content: start;
+}
+
+.field span {
+  font-size: 0.9rem;
+  color: #4f6280;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(18, 50, 80, 0.22);
+  background: #ffffff;
+  color: #123250;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: rgba(11, 147, 191, 0.8);
+}
+
+.field-span-2 {
+  grid-column: span 2;
+}
+
+.field-span-full {
+  grid-column: 1 / -1;
+}
+
+.field-help {
+  color: #99a2b3;
+  font-size: 0.86rem;
+  text-align: right;
+}
+
+.quote-checklist {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(18, 50, 80, 0.22);
+  background: #ffffff;
+  margin-top: 8px;
+}
+
+.quote-multiselect {
+  position: relative;
+}
+
+.quote-multiselect-trigger {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(18, 50, 80, 0.22);
+  background: #ffffff;
+  color: #123250;
+  cursor: pointer;
+}
+
+.quote-multiselect.open .quote-multiselect-trigger {
+  border-color: rgba(11, 147, 191, 0.8);
+}
+
+.quote-multiselect-trigger span {
+  color: #4f6280;
+}
+
+.quote-multiselect-trigger strong {
+  color: #4f6280;
+  font-size: 0.9rem;
+}
+
+.quote-checkbox-option {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: #123250;
+  line-height: 1.35;
+}
+
+.quote-checkbox-option input {
+  accent-color: #3d56d1;
+  margin: 2px 0 0;
+}
+
+.quote-radio-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.5fr;
+  gap: 18px;
+  align-items: end;
+  margin-top: 16px;
+}
+
+.quote-radio-card,
+.quote-radio-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.quote-radio-card strong,
+.quote-radio-stack strong {
+  font-size: 1rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.radio-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #123250;
+}
+
+.radio-group input {
+  accent-color: #3d56d1;
+}
+
+.quote-date-note {
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+}
+
+.quote-date-note strong {
+  color: #4f6280;
+  font-size: 0.95rem;
+}
+
+.quote-policy-notes {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.quote-duedates {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.quote-duedate-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quote-duedate-item strong {
+  display: block;
+  margin-top: 4px;
+  color: #28469a;
+  font-size: 0.98rem;
+}
+
+.quote-empty-copy {
+  font-style: italic;
+}
+
+.quote-submit-btn {
+  width: 100%;
+  margin-top: 22px;
+  background: linear-gradient(135deg, #3d56d1 0%, #4350b3 100%);
 }
 
 .advisor-mobile-toggle {
@@ -820,13 +1206,41 @@ select {
   .advisor-quick-grid,
   .advisor-summary-grid,
   .advisor-workspace,
-  .advisor-home-kpis {
+  .advisor-home-kpis,
+  .quote-summary-grid,
+  .quote-flag-grid,
+  .quote-form-grid {
     grid-template-columns: 1fr;
   }
 
   .advisor-table-header {
     flex-direction: column;
     align-items: start;
+  }
+
+  .advisor-table-meta {
+    justify-items: start;
+  }
+
+  .quote-section-header,
+  .quote-radio-grid {
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .quote-checklist {
+    grid-template-columns: 1fr;
+  }
+
+  .field-span-2,
+  .field-span-full {
+    grid-column: auto;
+  }
+
+  .quote-section-aside,
+  .quote-date-note {
+    justify-items: start;
   }
 
   .advisor-mobile-toggle {
@@ -860,6 +1274,10 @@ select {
     width: 100%;
     max-width: none;
   }
+
+  .quote-section {
+    padding: 22px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -891,7 +1309,8 @@ select {
   .advisor-stage,
   .advisor-login-panel,
   .advisor-sidebar,
-  .advisor-workspace-card {
+  .advisor-workspace-card,
+  .quote-section {
     border-radius: 22px;
   }
 
@@ -925,5 +1344,13 @@ select {
 
   .advisor-subnav {
     padding-left: 8px;
+  }
+
+  .quote-section {
+    padding: 18px;
+  }
+
+  .quote-section-title h2 {
+    font-size: 1.65rem;
   }
 }
